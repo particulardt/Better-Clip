@@ -24,7 +24,6 @@ export const getClipsForStreamer = async function (streamerId: string, params: P
 
     const started_at = params.startDate || "2025-01-01T00:00:00Z";
     const ended_at = params.endDate || new Date().toISOString();
-
     const clips: Clip[][] = [];
 
     try {
@@ -42,7 +41,6 @@ export const getClipsForStreamer = async function (streamerId: string, params: P
         });
 
         clips.push(res.data.data)
-        console.log(res.data.data.length, res.data.pagination);
 
         let curPage = res.data.pagination.cursor;
 
@@ -65,27 +63,18 @@ export const getClipsForStreamer = async function (streamerId: string, params: P
         curPage = res.data.pagination.cursor;
         }
 
-        console.log("clips length: ", clips[0].length);
-
         if (params.gameId) {
             const filteredClips: Clip[][] = [];
-            console.log ("filter activated");
             for (const arr of clips) {
                 filteredClips.push(arr.filter( (clip) => clip.game_id === params.gameId));
             }
-            console.log("new clips length: ", filteredClips[0].length);
-            console.log(filteredClips);
         }
 
-        
     }
     catch (err) {
-        console.log(err);
+        console.error(err);
     }
 };
-
-
-
 
 export const getRequest: Params = {
     gameId,
