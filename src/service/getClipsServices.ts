@@ -17,7 +17,7 @@ interface Clip {
     game_id: string
 }
 
-export const getClipsForStreamer = async function (streamerId: string, params: Params) {
+export const getClipsForStreamer = async function (streamerId: string, params: Params){
     if (!streamerId) {
         throw new Error("streamer id is required");
     }
@@ -32,7 +32,7 @@ export const getClipsForStreamer = async function (streamerId: string, params: P
                 "broadcaster_id": streamerId,
                 started_at,
                 ended_at,
-                first: params.perPage
+                first: params.perPage || 20
             },
             headers: {
                 "Authorization": `Bearer ${accessToken}`,
@@ -68,11 +68,14 @@ export const getClipsForStreamer = async function (streamerId: string, params: P
             for (const arr of clips) {
                 filteredClips.push(arr.filter( (clip) => clip.game_id === params.gameId));
             }
+            return filteredClips;
         }
 
+        return clips;
     }
     catch (err) {
         console.error(err);
+        return [];
     }
 };
 
