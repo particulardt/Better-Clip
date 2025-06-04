@@ -1,7 +1,7 @@
 import fs from "fs/promises"
 import path from "path"
 
-const filePath = path.join(__dirname, "./src/utils/popularStreamers.json");
+const filePath = path.join(__dirname, "../src/utils/popularStreamers.json");
 
 export const checkIfJsonExists = async function() {
     try {

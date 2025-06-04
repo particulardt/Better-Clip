@@ -1,6 +1,5 @@
 interface twitchStreamer {
     "user_id": string;
-    "user_login": string
 }
 
 interface popularNowStreamers {
