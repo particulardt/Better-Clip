@@ -6,14 +6,14 @@ const filePath = path.join(__dirname, "../src/utils/popularStreamers.json");
 export const checkIfJsonExists = async function() {
     try {
         await fs.access(filePath);
-        console.log("Json найден");
+        console.log("Json found");
     } catch (error) {
         if (error instanceof Error && "code" in error) {
             try {
                 const initialObject = { "data": []}
                 const initialData = JSON.stringify(initialObject, null, 2);
                 await fs.writeFile(filePath, initialData, 'utf-8');
-                console.log('Файл popularStreamers.json не обнаружен, создан с нуля.');
+                console.log('Json not found, has been created now.');
             }
             catch (error) {
                 console.error("блабла", error);
@@ -21,7 +21,7 @@ export const checkIfJsonExists = async function() {
             }
         } 
         else {
-            console.error("Не смогли ни проверить файл popularStreamers.json, ни создать. ", error);
+            console.error("Could neither find the json file not create it", error);
             throw error;
         }
     }

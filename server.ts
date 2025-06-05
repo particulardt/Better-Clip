@@ -12,9 +12,9 @@ const port = process.env.PORT || 3000;
 // const streamerId = process.env.BROADCASTER_ID as string;
 // getClipsForStreamer(streamerId, getRequest);
 
+checkIfJsonExists();
 updateStreamersList();
-// checkIfJsonExists();
-// getClipsAndRandomThem();
+getClipsAndRandomThem();
 
 
 
