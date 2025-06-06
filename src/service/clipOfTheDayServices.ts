@@ -1,6 +1,7 @@
 import streamersData from "../utils/popularStreamers.json";
 import { getClipsForStreamer } from "./getClipsServices";
 import type { twitchStreamer } from "../../types/twitchStreamer";
+import type { Clip } from "./getClipsServices"
 
 
 // генерирую рандомный индекс массива
@@ -15,16 +16,25 @@ const startDate = createStartDateString(2025, 5, 25);
 // запрашиваю клипы по апи для выпавшего стримера 
 export const getClipsAndRandomThem = async function() {
     const clips = await getClipsForStreamer(todaysStreamerId, {
-        startDate: "2025-05-25T00:00:00Z",
+        startDate
     })
     // console.log(clips);
+    let clip: Clip = {
+        id: "placeholder",
+        game_id: "placeholder"
+    };
 
-    const randomPage = Math.ceil(Math.random() * (clips.length - 1));
-    console.log("generated random page: ", randomPage);
-    const randomIndex = Math.ceil(Math.random() * (clips[randomPage].length - 1));
-    console.log("generated random index: ", randomIndex);
+    // может, хотя бы for с каким-нибудь произвольным ограничением? здесь слишком большой потенциал для проблем
+    // особенно учитывая, что я собрал стримеров с одной даты, а запрашивать клипы могут для совсем другой
+    // там нужных клипов может попросту уже не быть
+    while (clip.game_id !== process.env.GAME_ID) {
+        const randomPage = Math.ceil(Math.random() * (clips.length - 1));
+        const randomIndex = Math.ceil(Math.random() * (clips[randomPage].length - 1));
+        clip = clips[randomPage][randomIndex];
+        console.log("randomized the clip with the following id: ", clip.game_id);
+    }
 
-    console.log(clips[randomPage][randomIndex]);
+    console.log(clip);
     }
 
 

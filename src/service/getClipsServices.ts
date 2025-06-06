@@ -12,7 +12,7 @@ interface Params {
     perPage?: number
 }
 
-interface Clip {
+export interface Clip {
     id: string;
     game_id: string
 }
