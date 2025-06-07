@@ -14,7 +14,8 @@ interface Params {
 
 export interface Clip {
     id: string;
-    game_id: string
+    game_id: string;
+    view_count: number
 }
 
 export const getClipsForStreamer = async function (streamerId: string, params: Params){

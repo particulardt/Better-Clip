@@ -3,40 +3,77 @@ import { getClipsForStreamer } from "./getClipsServices";
 import type { twitchStreamer } from "../../types/twitchStreamer";
 import type { Clip } from "./getClipsServices"
 
-
-// генерирую рандомный индекс массива
-const todaysIndex = Math.ceil(Math.random() * streamersData.data.length);
-const todaysStreamer = streamersData.data[todaysIndex] as twitchStreamer;
-const todaysStreamerId = todaysStreamer.user_id;
-console.log("randomized streamer id: ", todaysStreamerId);
-
 // генерирую строку с датой. аргументы МОЖНО менять
 const startDate = createStartDateString(2025, 5, 25);
 
-// запрашиваю клипы по апи для выпавшего стримера 
-export const getClipsAndRandomThem = async function() {
-    const clips = await getClipsForStreamer(todaysStreamerId, {
+// здесь генерирую рандомный клип. логика такая:
+// во внешнем цикле рандомно выбирается id стримера из json-файла;
+// во внутреннем цикле пытаемся найти для этого id клип, который удовлетворяет условиям (игра, минимальные просмотры клипа);
+// абсолютно возможна ситуация, при которой внутренний цикл не найдёт подходящий клип. тогда мы просто вернёмся во внешний цикл и сгенерируем нового стримера, новый id;
+// по сложности это n^2, да, но:
+//          api-запрос только во внешнем цикле, 
+//          значения i и j ограничены 10^3, чтобы избежать совсем тяжёлых сценариев,
+//          функция вызывается несколько раз за день, не более, так что сейчас не нужно переживать о масштабируемости
+export const getRandomClip = async function() {
+    let i = 1;
+
+    while (true) {
+        if (i > 1000) {
+            console.error("could not find the right clip after all the iterations..");
+            return;
+        }
+
+        const todaysStreamerId = chooseRandomStreamerId();
+
+        const clips = await getClipsForStreamer(todaysStreamerId, {
         startDate
     })
     // console.log(clips);
     let clip: Clip = {
         id: "placeholder",
-        game_id: "placeholder"
+        game_id: "placeholder",
+        view_count: 0
     };
 
-    // может, хотя бы for с каким-нибудь произвольным ограничением? здесь слишком большой потенциал для проблем
-    // особенно учитывая, что я собрал стримеров с одной даты, а запрашивать клипы могут для совсем другой
-    // там нужных клипов может попросту уже не быть
-    while (clip.game_id !== process.env.GAME_ID) {
+    let j = 1;
+    while (j <= 1000) {
         const randomPage = Math.ceil(Math.random() * (clips.length - 1));
         const randomIndex = Math.ceil(Math.random() * (clips[randomPage].length - 1));
-        clip = clips[randomPage][randomIndex];
-        console.log("randomized the clip with the following id: ", clip.game_id);
+
+        const curClip = clips[randomPage][randomIndex];
+
+        // несколько раз были проблемы с тем, что у клипа почему-то не было game_id. это временная часть для отладки
+        if (curClip.game_id === undefined) {
+            console.log("WEIRD CASE, CHECK IT OUT: ", curClip);
+        }
+
+        if (curClip.game_id === process.env.GAME_ID && curClip.view_count >= 10) {
+            clip = curClip;
+            break;
+        }
+
+        j++;
     }
 
-    console.log(clip);
+    if (clip.id !== "placeholder") {
+        console.log(clip);
+        return;
     }
 
+    console.log("could not find the right clip for a particular random streamer, trying again for another..");
+    i++;
+    }
+}
+
+
+function chooseRandomStreamerId () {
+    const todaysIndex = Math.ceil(Math.random() * streamersData.data.length);
+    const todaysStreamer = streamersData.data[todaysIndex] as twitchStreamer;
+    const todaysStreamerId = todaysStreamer.user_id;
+    console.log("randomized streamer id: ", todaysStreamerId);
+
+    return todaysStreamerId;
+}
 
 // пример вызова: createStartDateString(2025, 5, 25);
 function createStartDateString (year: number, month: number, day: number) {
