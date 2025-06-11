@@ -36,7 +36,7 @@ export const updateStreamersList = async function() {
             headers
         });
 
-        addNewStreamersToJson(streamersList, res.data.data);
+        await addNewStreamersToJson(streamersList, res.data.data);
     } catch (error) {
         console.error(error);
     }

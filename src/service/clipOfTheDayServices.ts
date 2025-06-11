@@ -42,7 +42,11 @@ export const getRandomClip = async function() {
 
         const curClip = clips[randomPage][randomIndex];
 
-        // несколько раз были проблемы с тем, что у клипа почему-то не было game_id. это временная часть для отладки
+        // несколько раз были проблемы. это временная часть для отладки
+        if (curClip === undefined) {
+            console.log("CLIP NOT FOUND, RANDOM PAGE: ", randomPage, " RANDOM INDEX: ", randomIndex); 
+        }
+        // несколько раз были проблемы. это временная часть для отладки 
         if (curClip.game_id === undefined) {
             console.log("WEIRD CASE, CHECK IT OUT: ", curClip);
         }

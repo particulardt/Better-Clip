@@ -4,7 +4,6 @@ import path from "path"
 const filePath = path.join(__dirname, "../src/utils/popularStreamers.json");
 
 export const checkIfJsonExists = async function() {
-    console.log("hehe");
     try {
         await fs.access(filePath);
         console.log("Json found");
