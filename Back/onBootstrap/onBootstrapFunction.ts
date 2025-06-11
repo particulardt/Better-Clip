@@ -5,5 +5,4 @@ import { updateStreamersList } from "./updateStreamersList";
 export const onBootstrapFunction = async function() {
     await checkIfJsonExists();
     await updateStreamersList();
-    await getRandomClip();
 }

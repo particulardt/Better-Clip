@@ -61,7 +61,7 @@ export const getRandomClip = async function() {
 
     if (clip.id !== "placeholder") {
         console.log(clip);
-        return;
+        return clip;
     }
 
     console.log("could not find the right clip for a particular random streamer, trying again for another..");

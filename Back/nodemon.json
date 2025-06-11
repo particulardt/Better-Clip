@@ -1,0 +1,9 @@
+{
+    "ignore": [
+      "src/utils/popularStreamers.json",
+      "*.json",
+      "node_modules/**"
+    ],
+    "watch": ["*.ts"],
+    "ext": "ts"
+  }
