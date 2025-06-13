@@ -1,12 +1,16 @@
 <template>
   <div class="app">
-    <h1>BetterClip</h1>
+    <div class="header">
+      <h1>BetterClip</h1>
+      <SearchBar />
+    </div>
     <ClipViewer />
   </div>
 </template>
 
 <script setup>
 import ClipViewer from './components/ClipViewer.vue'
+import SearchBar from './components/SearchBar.vue'
 </script>
 
 <style>
@@ -20,8 +24,16 @@ import ClipViewer from './components/ClipViewer.vue'
   color: white;
 }
 
-h1 {
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 2rem;
+}
+
+h1 {
+  margin: 0;
   font-size: 2.5rem;
   color: #9147ff;
 }
