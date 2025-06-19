@@ -5,6 +5,7 @@
       v-model="searchQuery" 
       placeholder="Поиск..." 
       class="search-input"
+      @keyup.enter="handleSearch"
     />
     <button @click="handleSearch" class="search-button">Найти</button>
   </div>
@@ -12,12 +13,15 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const searchQuery = ref('')
 
 const handleSearch = () => {
-  // Здесь будет логика поиска
-  console.log('Поиск:', searchQuery.value)
+  if (searchQuery.value.trim()) {
+    router.push(`/${searchQuery.value.trim()}`)
+  }
 }
 </script>
 

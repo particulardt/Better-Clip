@@ -1,16 +1,18 @@
 <template>
   <div class="app">
     <div class="header">
-      <h1>BetterClip</h1>
+      <h1 @click="router.push('/')" class="logo">BetterClip</h1>
       <SearchBar />
     </div>
-    <ClipViewer />
+    <router-view></router-view>
   </div>
 </template>
 
 <script setup>
-import ClipViewer from './components/ClipViewer.vue'
 import SearchBar from './components/SearchBar.vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 </script>
 
 <style>
@@ -32,10 +34,16 @@ import SearchBar from './components/SearchBar.vue'
   margin-bottom: 2rem;
 }
 
-h1 {
+.logo {
   margin: 0;
   font-size: 2.5rem;
   color: #9147ff;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.logo:hover {
+  color: #a970ff;
 }
 
 body {
