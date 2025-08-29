@@ -1,1 +1,7 @@
 /Front/.vscode
+
+Back/node_modules
+
+Back/src/utils/popularStreamers.json
+
+Back/.env
